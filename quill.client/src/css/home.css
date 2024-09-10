@@ -1,0 +1,31 @@
+.note-record {
+    cursor: pointer;
+}
+
+.item-options {
+    text-align: end;
+    opacity: 0;
+    transition: all 0.1s ease-in;
+}
+
+.note-record:hover>.item-options {
+    opacity: 1;
+}
+
+.text-hover-primary:hover {
+    color: rgb(var(--bs-primary-rgb))!important;
+}
+
+.text-hover-danger:hover {
+    color: rgb(var(--bs-danger-rgb))!important;
+}
+
+.backup-div > small {
+    opacity: 0;
+    cursor: default;
+    transition: all 0.2s ease-out;
+}
+
+.backup-div > button:hover ~ small {
+    opacity: 1;
+}

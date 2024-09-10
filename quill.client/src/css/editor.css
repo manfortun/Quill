@@ -1,0 +1,44 @@
+.editor {
+    border: solid 1px rgb(220, 220, 220);
+    border-radius: 10px;
+}
+
+.ql-editor {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.inner-forward-code {
+    padding-left: 0 !important;
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+    border-left-width: 0 !important;
+}
+
+.inner-backward-code {
+    padding-right: 0 !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-right-width: 0 !important;
+}
+
+.save-message {
+    animation: pop 2s normal forwards;
+}
+
+@keyframes pop {
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

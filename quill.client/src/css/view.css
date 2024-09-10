@@ -1,0 +1,45 @@
+.highlight {
+    animation: toggleHighlight 2s ease-in forwards;
+}
+
+@keyframes toggleHighlight {
+    0% {
+        background-color: transparent;
+    }
+    25% {
+        background-color: red;
+    }
+    50% {
+        background-color: transparent;
+    }
+    75% {
+        background-color: red;
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+.inner-forward-code {
+    padding-left: 0!important;
+    border-top-left-radius: 0px!important;
+    border-bottom-left-radius: 0px!important;
+    border-left-width: 0!important;
+}
+
+.inner-backward-code {
+    padding-right: 0 !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-right-width: 0 !important;
+}
+
+.cvc {
+    opacity: 1!important;
+    transition: opacity 0.2s ease-in;
+}
+
+.cvc.invisible {
+    opacity: 0 !important;
+    transition: opacity 0.2s ease-in;
+}

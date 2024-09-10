@@ -1,0 +1,15 @@
+.tab {
+    background-color: rgb(50, 50, 50);
+    padding: 5px 15px;
+    border-radius: 20px;
+    margin: 5px 0;
+}
+
+.tab>a {
+    color: rgb(180, 180, 180);
+    transition: all 0.2s ease;
+}
+
+.tab>a:hover {
+    color: white;
+}

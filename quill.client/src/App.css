@@ -1,0 +1,130 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Teachers:ital,wght@0,400..800;1,400..800&display=swap');
+
+#root {
+    font-family: 'Poppins', sans-serif !important;
+    display: flex;
+    flex-direction: column;
+    align-self: baseline;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    background-color: rgb(20, 20, 20) !important;
+    padding-bottom: 30px;
+}
+
+th, td {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.container {
+    background-color: rgb(50, 50, 50);
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+h1, h2, h3, h4, h5, h6, button, strong {
+    color: white !important;
+}
+
+p, small, td, th, li, blockquote {
+    color: rgb(210, 210, 210) !important;
+}
+
+input {
+    background-color: transparent!important;
+    color: white!important;
+}
+
+code>em {
+    color: dodgerblue!important;
+}
+
+code>strong {
+    color: lawngreen!important;
+    font-weight: normal!important;
+}
+
+code {
+    background-color: rgb(40, 40, 40) !important;
+    color: rgb(var(--bs-warning-rgb));
+    padding-left: 7px!important;
+    padding-right: 7px!important;
+    border-radius: 10px!important;
+    border: 1px solid rgb(80, 80, 80);
+}
+
+pre {
+    background-color: rgb(40, 40, 40) !important;
+    color: rgb(var(--bs-warning-rgb));
+    padding: 7px 20px 7px 7px!important;
+    border-radius: 10px !important;
+    border: 1px solid rgb(80, 80, 80);
+    width:fit-content!important;
+}
+
+    pre > code {
+        font-size: 100%!important;
+        background-color: none!important;
+        border-radius: 0px !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+
+table {
+    --bs-table-bg: transparent!important;
+    --bs-table-border-color: gray!important;
+}
+
+.ql-editor ol>li {
+    list-style-type: decimal!important;
+    padding-left: 10px!important;
+}
+
+.ql-editor ul > li {
+    list-style-type: circle !important;
+    padding-left: 10px !important;
+}
+
+.ql-editor li::marker {
+    color: gray !important;
+}
+
+.ql-editor img {
+    border-radius: 10px!important;
+    cursor: default!important;
+}
+
+.ql-editor > .card {
+    width: fit-content !important;
+    background-color: transparent!important;
+    border: 0px solid rgb(80, 80, 80);
+}
+
+    .ql-editor > .card > .header {
+        background-color: rgb(80, 80, 80) !important;
+        padding: 3px !important;
+        padding-left: 10px!important;
+        border-radius: 10px 10px 0 0 !important;
+        border: solid rgb(80, 80, 80);
+        border-width: 1px 1px 0 1px;
+        font-family: monospace;
+    }
+
+    .ql-editor > .card > .card-body {
+        background-color: rgb(40, 40, 40) !important;
+        padding: 7px 20px 7px 7px !important;
+        border-radius: 0 0 10px 10px !important;
+        border: 1px solid rgb(80, 80, 80);
+    }
+
+.ql-editor > .card > .card-body > pre {
+    border-radius: 0!important;
+    border: none!important;
+    padding: 0!important;
+}
+
+td {
+    align-content: center !important;
+}

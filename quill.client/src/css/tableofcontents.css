@@ -1,0 +1,32 @@
+.table-of-contents {
+    background-color: rgb(50, 50, 50);
+    width: 250px;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.table-of-contents * {
+    font-size: 13px;
+    color: white;
+}
+
+.table-of-contents a {
+    cursor: pointer;
+    opacity: 0.4;
+    transition: all ease-in 0.1s;
+}
+
+.table-of-contents ul {
+    margin-top: 5px;
+
+}
+
+.table-of-contents a:hover {
+    opacity: 1;
+}
+
+@media(max-width:1871px) {
+    .table-of-contents {
+        display: none;
+    }
+}
