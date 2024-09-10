@@ -12,7 +12,7 @@ public class ContentsController : ControllerBase
     private readonly NoteRepository _repository;
     private readonly TableOfContentService _tocService;
     private readonly CacheService _cacheService;
-    // This is for test push and commit
+
     public ContentsController(NoteRepository repository, TableOfContentService tocService, CacheService cacheService)
     {
         _repository = repository;
