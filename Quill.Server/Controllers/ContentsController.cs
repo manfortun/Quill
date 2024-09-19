@@ -18,6 +18,7 @@ public class ContentsController : ControllerBase
         _repository = repository;
         _tocService = tocService;
         _cacheService = cacheService;
+        error;
     }
 
     [HttpGet("{identifier}")]

@@ -1,4 +1,6 @@
-﻿namespace Quill.Server.Services;
+﻿using System.Text;
+
+namespace Quill.Server.Services;
 
 public class TempFileService
 {
@@ -67,13 +69,16 @@ public class TempFileService
 
     private async Task<string> ReadAsync(FileStream fs)
     {
-        string content = string.Empty;
+        StringBuilder content = new StringBuilder();
         using (StreamReader sr = new StreamReader(fs, leaveOpen: true))
         {
-            content = await sr.ReadToEndAsync();
+            while (!sr.EndOfStream)
+            {
+                content.Append(await sr.ReadLineAsync());
+            }
         }
 
-        return content;
+        return content.ToString();
     }
 
     private async Task WriteAsync(FileStream fs, string? content)
