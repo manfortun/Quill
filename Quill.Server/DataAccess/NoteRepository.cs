@@ -7,17 +7,20 @@ namespace Quill.Server.DataAccess;
 
 public class NoteRepository
 {
+    private readonly ILogger<NoteRepository> _logger;
     public readonly string BaseDirectory;
 
-    public NoteRepository(IConfiguration config)
+    public NoteRepository(IConfiguration config, ILogger<NoteRepository> logger)
     {
+        _logger = logger;
         BaseDirectory = config.GetValue<string>("Directory") ?? throw new InvalidOperationException("No directory specified in application settings.");
     }
 
     public virtual IEnumerable<Note> GetAll(bool includeContent = true)
     {
-        List<Note> notes = new();
+        _logger.LogTrace("Obtaining all notes.");
         string[] identifiers = this.GetExistingIdentifiers();
+        _logger.LogTrace("Found {0} notes.", identifiers.Length);
 
         foreach (string identifier in identifiers)
         {
@@ -33,30 +36,33 @@ public class NoteRepository
     public virtual Note? Get(string identifier, bool includeContent = true)
     {
         string filepath = this.GetFilePath(identifier.AsFileName(BaseDirectory, NoteExtension.EXTENSION));
-        Note note;
+        _logger.LogTrace("Obtaining {0}", filepath);
 
         if (!File.Exists(filepath))
         {
+            _logger.LogError("File not exists.");
             return default!;
         }
 
         using (StreamReader reader = new StreamReader(filepath))
         {
             string content = includeContent ? reader.ReadToEnd() : string.Empty;
-            note = new Note()
+            Note note = new Note()
             {
                 Title = Path.GetFileNameWithoutExtension(filepath),
                 Content = content,
                 LastWrite = File.GetLastWriteTime(filepath),
                 Path = filepath,
             };
-        }
 
-        return note;
+            _logger.LogTrace("File obtained.");
+            return note;
+        }
     }
 
     public virtual Enums.SaveResult Create(INote note, out string identifier)
     {
+        _logger.LogTrace("Creating new note.");
         string filepath = this.GetFilePath(note.Title);
         identifier = note.Title.AsIdentifer();
 
@@ -70,6 +76,7 @@ public class NoteRepository
 
     public virtual Enums.SaveResult Update(INoteUpdate note, out string identifier)
     {
+        _logger.LogTrace("Updating note for {0}", note.Title);
         string oldFilepath = this.GetFilePath(note.OldTitle ?? note.Title);
         string newFilepath = this.GetFilePath(note.Title);
 
@@ -116,6 +123,7 @@ public class NoteRepository
 
     public virtual Enums.SaveResult Delete(string identifier, bool hardDelete = false)
     {
+        _logger.LogTrace("Deleting note for {0}", identifier);
         string filepath = this.GetFilePath(identifier.AsFileName());
 
         if (!File.Exists(filepath)) return Enums.SaveResult.FileNotExists;
@@ -146,10 +154,12 @@ public class NoteRepository
                     .SetHeaderIds();
 
                 writer.Write(appliedContent);
+                _logger.LogTrace("File written in {0}", filepath);
             }
         }
         catch (Exception)
         {
+            _logger.LogError("Unable to write file in {0}", filepath);
             return Enums.SaveResult.Failed;
         }
 
@@ -158,13 +168,14 @@ public class NoteRepository
 
     public virtual string GetFilePath(string title)
     {
+        _logger.LogTrace("Test: {0}", title);
         return Path.Combine(BaseDirectory, title.TitleWithExtension());
     }
 
     public string[] GetExistingIdentifiers(string? extension = null)
     {
         string[] filepaths = Directory.GetFiles(BaseDirectory, $"*.{extension ?? NoteExtension.EXTENSION}");
-
+        
         return filepaths
             .Select(path => Path.GetFileNameWithoutExtension(path).AsIdentifer())
             .ToArray();

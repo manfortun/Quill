@@ -15,19 +15,23 @@ public class NotesController : ControllerBase
     private readonly BackupService _backupService;
     private readonly TempFileService _tempFileService;
     private readonly string _baseUrl;
+    private readonly ILogger<NotesController> _logger;
 
     public NotesController(
         NoteRepository repository,
         CacheService cacheService,
         BackupService backupService,
         TempFileService tempFileService,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        ILogger<NotesController> logger)
     {
         _repository = repository;
         _cacheService = cacheService;
         _backupService = backupService;
         _tempFileService = tempFileService;
         _baseUrl = $"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}/api";
+        _logger = logger;
+        _logger.LogTrace("Accessing notes API with base url = {0}", _baseUrl);
     }
 
     [HttpGet]
@@ -48,6 +52,7 @@ public class NotesController : ControllerBase
             });
         }
 
+        _logger.LogTrace("Obtained {0} record/s", readNotes.Count);
         return Ok(readNotes);
     }
 
@@ -56,12 +61,18 @@ public class NotesController : ControllerBase
     {
         ReadNoteDto? readNoteDto = _cacheService.TryGetCache<ReadNoteDto>(identifier, nameof(ReadNoteDto));
 
+        if (readNoteDto is not null)
+        {
+            _logger.LogTrace("Note obtained from cache.");
+        }
+
         if (readNoteDto is null)
         {
             Note? note = _repository.Get(identifier, includeContent: true);
 
             if (note is null)
             {
+                _logger.LogTrace("Note not found.");
                 return NotFound();
             }
             else
@@ -81,16 +92,19 @@ public class NotesController : ControllerBase
 
         }
 
+        _logger.LogTrace("Note obtained.");
         return Ok(readNoteDto);
     }
 
     [HttpPost]
     public IActionResult CreateNewNote([FromBody] CreateNewNoteDto request)
     {
+        _logger.LogTrace("Creating new note.");
         try
         {
             if (!this.ModelState.IsValid)
             {
+                _logger.LogTrace("Title is required to create a new note.");
                 return BadRequest("Title is required to create a new note.");
             }
 
@@ -108,10 +122,12 @@ public class NotesController : ControllerBase
 
             if (result == Enums.SaveResult.WithDuplicateTitle)
             {
+                _logger.LogTrace("A file with this name already exists. Try using another title.");
                 return BadRequest("A file with this name already exists. Try using another title.");
             }
             else if (result == Enums.SaveResult.FileNotExists)
             {
+                _logger.LogTrace("The file specified does not exist.");
                 return NotFound("The file specified does not exist.");
             }
             else if (result == Enums.SaveResult.Success)
@@ -126,6 +142,7 @@ public class NotesController : ControllerBase
             }
             else
             {
+                _logger.LogTrace("Something went wrong. Please contact administrator.");
                 return BadRequest("Something went wrong. Please contact administrator.");
             }
         }
@@ -183,6 +200,7 @@ public class NotesController : ControllerBase
     [HttpDelete("{identifier}")]
     public IActionResult Delete(string identifier)
     {
+        _logger.LogTrace("Deleting file for {0}", identifier);
         try
         {
             _cacheService.Decache(identifier, nameof(ReadNoteDto));
