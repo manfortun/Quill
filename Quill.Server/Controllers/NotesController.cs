@@ -120,7 +120,7 @@ public class NotesController : ControllerBase
                 _cacheService.Decache(identifier, nameof(TOCLayer));
 
                 // delete temp file
-                this._tempFileService.DeleteTempFile(identifier);
+                this._tempFileService.DeleteTempFile(request.Title);
 
                 return Ok(identifier);
             }

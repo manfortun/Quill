@@ -9,6 +9,7 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.WebHost.UseUrls("http://0.0.0.0:80");
 
         // Add services to the container.
         builder.Services.AddMemoryCache();
@@ -27,7 +28,7 @@ public class Program
             options.AddPolicy("AllowSpecificOrigin",
                 builder =>
                 {
-                    builder.WithOrigins("https://localhost:5173", "https://localhost:88", "http://192.168.1.10:88")
+                    builder.WithOrigins("http://192.168.1.10:8080", "http://localhost:8080")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();
@@ -40,6 +41,11 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        builder.Logging
+            .ClearProviders()
+            .AddConsole();
+
 
         var app = builder.Build();
 
@@ -65,7 +71,7 @@ public class Program
 
         var autobackupService = app.Services.GetRequiredService<AutoBackupService>();
 
-        autobackupService?.ExecuteAutoBackup();
+        //autobackupService?.ExecuteAutoBackup();
 
         app.Run();
     }
