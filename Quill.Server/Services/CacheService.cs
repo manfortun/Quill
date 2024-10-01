@@ -11,7 +11,6 @@ public class CacheService
     {
         _cache = cache;
         _logger = logger;
-        // This is a test
     }
 
     public void Cache<Entity>(string location, Entity entity, string signature = "")
