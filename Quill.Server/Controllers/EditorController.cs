@@ -11,13 +11,11 @@ public class EditorController : ControllerBase
 {
     private readonly NoteRepository _noteRepository;
     private readonly TempFileService _tempFileService;
-    private readonly ILogger<EditorController> _logger;
 
-    public EditorController(NoteRepository noteRepository, TempFileService tempFileService, ILogger<EditorController> logger)
+    public EditorController(NoteRepository noteRepository, TempFileService tempFileService)
     {
         _noteRepository = noteRepository;
         _tempFileService = tempFileService;
-        _logger = logger;
     }
 
     [HttpPost]
@@ -31,11 +29,6 @@ public class EditorController : ControllerBase
             }
 
             bool result = await this._tempFileService.CreateTempFileAsync(note.Title, note.Content);
-
-            if (result)
-            {
-                _logger.LogTrace("Autosaved instance.");
-            }
 
             return Ok(result ? "Autosaved" : string.Empty);
         }
@@ -74,10 +67,6 @@ public class EditorController : ControllerBase
 
             string? content = await this._tempFileService.GetContent(identifier);
 
-            if (!string.IsNullOrEmpty(content))
-            {
-                _logger.LogTrace("Obtained autosaved content for {0}", identifier);
-            }
             return Ok(content);
         }
         catch (Exception ex)
@@ -91,7 +80,6 @@ public class EditorController : ControllerBase
     {
         try
         {
-            _logger.LogTrace("Deleting temp content for {0}", identifier);
             this._tempFileService.DeleteTempFile(identifier);
             return Ok();
         }
