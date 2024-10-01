@@ -18,8 +18,31 @@ public class BackupService
         _backupLog = config["Logging:BackupLog"];
         if (!File.Exists(_scriptPath))
         {
-            throw new FileNotFoundException("The backup script file was either moved or deleted.");
+            //this.Test();
+            //throw new FileNotFoundException("The backup script file was either moved or deleted.");
         }
+    }
+
+    private void Test(string root = "/")
+    {
+        try
+        {
+            if (root.StartsWith("/proc") || root.StartsWith("/sys")) return;
+            string[] directories = Directory.GetDirectories(root);
+            string[] files = Directory.GetFiles(root);
+
+            foreach (var file in files)
+            {
+                Console.WriteLine(file);
+            }
+
+            foreach (var directory in directories)
+            {
+                Console.WriteLine(directory);
+                this.Test(directory);
+            }
+        }
+        catch (Exception ex) { }
     }
 
     protected string CreateScript()

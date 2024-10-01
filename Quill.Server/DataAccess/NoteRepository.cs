@@ -7,16 +7,17 @@ namespace Quill.Server.DataAccess;
 
 public class NoteRepository
 {
+    private readonly ILogger<NoteRepository> _logger;
     public readonly string BaseDirectory;
 
-    public NoteRepository(IConfiguration config)
+    public NoteRepository(IConfiguration config, ILogger<NoteRepository> logger)
     {
+        _logger = logger;
         BaseDirectory = config.GetValue<string>("Directory") ?? throw new InvalidOperationException("No directory specified in application settings.");
     }
 
     public virtual IEnumerable<Note> GetAll(bool includeContent = true)
     {
-        List<Note> notes = new();
         string[] identifiers = this.GetExistingIdentifiers();
 
         foreach (string identifier in identifiers)
@@ -33,7 +34,6 @@ public class NoteRepository
     public virtual Note? Get(string identifier, bool includeContent = true)
     {
         string filepath = this.GetFilePath(identifier.AsFileName(BaseDirectory, NoteExtension.EXTENSION));
-        Note note;
 
         if (!File.Exists(filepath))
         {
@@ -43,16 +43,16 @@ public class NoteRepository
         using (StreamReader reader = new StreamReader(filepath))
         {
             string content = includeContent ? reader.ReadToEnd() : string.Empty;
-            note = new Note()
+            Note note = new Note()
             {
                 Title = Path.GetFileNameWithoutExtension(filepath),
                 Content = content,
                 LastWrite = File.GetLastWriteTime(filepath),
                 Path = filepath,
             };
-        }
 
-        return note;
+            return note;
+        }
     }
 
     public virtual Enums.SaveResult Create(INote note, out string identifier)
@@ -116,7 +116,7 @@ public class NoteRepository
 
     public virtual Enums.SaveResult Delete(string identifier, bool hardDelete = false)
     {
-        string filepath = this.GetFilePath(identifier.AsFileName());
+        string filepath = this.GetFilePath(identifier.AsFileName(BaseDirectory, NoteExtension.EXTENSION));
 
         if (!File.Exists(filepath)) return Enums.SaveResult.FileNotExists;
 
@@ -124,11 +124,12 @@ public class NoteRepository
         {
             using (FileWriteOverride fwo = new FileWriteOverride(filepath))
             {
-                FileSystem.DeleteFile(filepath, UIOption.OnlyErrorDialogs, hardDelete ? RecycleOption.DeletePermanently : RecycleOption.SendToRecycleBin);
+                File.Delete(filepath);
             }
         }
         catch (Exception)
         {
+            _logger.LogError("Unable to delete file: {0}", filepath);
             return Enums.SaveResult.Failed;
         }
 

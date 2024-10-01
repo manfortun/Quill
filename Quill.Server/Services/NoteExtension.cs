@@ -81,7 +81,10 @@ public static class NoteExtension
         string directoryName = Path.GetDirectoryName(Path.Combine(directory, identifier)) ?? Directory.GetCurrentDirectory();
 
         DirectoryInfo dirInfo = new DirectoryInfo(directoryName);
-        FileInfo[] files = dirInfo.GetFiles($"{identifier}.{extension}");
+        FileInfo[] files = dirInfo
+            .GetFiles($"*.{extension}")
+            .Where(f => string.Equals(f.Name, $"{identifier}.{extension}", StringComparison.OrdinalIgnoreCase))
+            .ToArray();
 
         if (files.Length > 0)
         {

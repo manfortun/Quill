@@ -5,10 +5,12 @@ namespace Quill.Server.Services;
 public class TempFileService
 {
     private readonly string _tempFileLocation;
+    private readonly ILogger<TempFileService> _logger;
 
-    public TempFileService(IConfiguration config)
+    public TempFileService(IConfiguration config, ILogger<TempFileService> logger)
     {
         _tempFileLocation = config["TempFileLocation"] ?? string.Empty;
+        _logger = logger;
     }
 
     public bool CheckTempFileExists(string filename)
@@ -55,7 +57,7 @@ public class TempFileService
     public void DeleteTempFile(string fileName)
     {
         string tempFileName = this.ToTempFileName(fileName);
-
+        _logger.LogTrace("Deleting: {0}", tempFileName);
         if (File.Exists(tempFileName))
         {
             File.Delete(tempFileName);
