@@ -11,7 +11,7 @@ jobs:
    -
     name: List files in current directory
     run: |
-     cd ..
+     cd .
      ls -la
    -
     name: Check current directory
