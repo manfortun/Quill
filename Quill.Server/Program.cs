@@ -28,7 +28,7 @@ public class Program
             options.AddPolicy("AllowSpecificOrigin",
                 builder =>
                 {
-                    builder.WithOrigins("http://192.168.1.10:8080", "http://localhost:8080")
+                    builder.WithOrigins("http://192.168.1.4:5000", "http://localhost:5000")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();
