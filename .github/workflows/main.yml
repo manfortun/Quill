@@ -10,9 +10,7 @@ jobs:
   steps:
    -
     name: List files in current directory
-    run: |
-     cd .
-     ls -la
+    run: ls -la
    -
     name: Check current directory
     run: pwd
