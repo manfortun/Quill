@@ -25,9 +25,9 @@ jobs:
     uses: docker/build-push-action@v6
     with:
      target: backend-build
-     context: .
+     context: ..
      platforms: linux/amd64,linux/arm64
-     file: ../Dockerfile
+     file: ./Dockerfile
      push: false
    -
     name: Build and push final backend (final-backend stage)
@@ -35,7 +35,7 @@ jobs:
     with:
      target: final-backend
      platforms: linux/amd64,linux/arm64
-     context: .
-     file: ../Dockerfile
+     context: ..
+     file: ./Dockerfile
      push: true
      tags: ${{ vars.DOCKER_USERNAME }}/quill-backend:latest
