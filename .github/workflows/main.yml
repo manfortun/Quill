@@ -30,6 +30,6 @@ jobs:
     name: Build and push
     uses: docker/build-push-action@v6
     with:
-     context: .
+     context: ../.
      push: true
      tags: ${{ vars.DOCKER_USERNAME }}/quill-backend:latest
