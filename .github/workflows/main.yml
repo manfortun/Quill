@@ -21,16 +21,22 @@ jobs:
     name: Set up Docker Buildx
     uses: docker/setup-buildx-action@v3
    -
-    name: Build and test
+    name: Build backend (backend-build stage)
     uses: docker/build-push-action@v6
     with:
      target: backend-build
      load: true
+     context: .
+     platforms: linux/amd64,linux/arm64
+     file: ./Dockerfile
+     push: false
    -
-    name: Build and push
+    name: Build and pus final backend (final-backend stage)
     uses: docker/build-push-action@v6
     with:
+     target: final-backend
      platforms: linux/amd64,linux/arm64
-     target: backend-build
+     context: .
+     file: ./Dockerfile
      push: true
      tags: ${{ vars.DOCKER_USERNAME }}/quill-backend:latest
