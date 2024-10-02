@@ -11,6 +11,9 @@ RUN npm run build
 # 2nd stage: Build the ASP.NET backend
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS backend-build
 WORKDIR /app
+
+RUN dotnet --info
+
 COPY Quill.Server/*.csproj ./Quill.Server/
 RUN dotnet restore ./Quill.Server/Quill.Server.csproj
 
